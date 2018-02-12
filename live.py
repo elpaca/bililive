@@ -10,7 +10,9 @@ def geturl(room_id):
 
 def islivestarted(room_id):
     r = requests.get("https://api.live.bilibili.com/room/v1/Room/get_info?room_id=" + str(room_id) + "&from=room")
-    return r.json()['data']['live_status']
+    if r.json()['code'] != 0:
+        raise Exception(r.json()['message'])
+    return r.json()['data']['live_status'] == 1
 
 def getrealroomid(room_id):
     r = requests.get("https://api.live.bilibili.com/room/v1/Room/room_init?id=" + str(room_id))
