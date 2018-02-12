@@ -15,6 +15,6 @@ https://api.live.bilibili.com/room/v1/Room/get_info?room_id=96348&from=room
 
 # get url
 get live url
-##url
+## url
 [cookie_free]
 https://api.live.bilibili.com/room/v1/Room/playUrl?cid=96348&quality=0&platform=web
