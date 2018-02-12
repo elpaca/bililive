@@ -26,7 +26,7 @@ def startrecording(room_id):
         b = danmaku.Client(room_id, filename_header + '.xml')
         b.start()
         
-        subprocess.call(['ffmpeg','-i', url, '-c', vcodec, filename_header + '.mp4'])
+        subprocess.call(['ffmpeg','-i', url, '-c:v', vcodec, filename_header + '.mp4'])
         b.stop()
         log('[%d] recording stopped.' % room_id)
     else:
