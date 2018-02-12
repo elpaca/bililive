@@ -8,8 +8,8 @@ from liveutils import log
 b = None
 vcodec = 'copy' # copy, h264, hevc
 
-def waitforlive(room_id):
-    real_id = liveutils.getrealroomid(room_id)
+def waitforlive(room_ids):
+    real_id = liveutils.getrealroomid(room_ids[0])
     log('real_id=%d' % real_id)
     while(True):
         startrecording(real_id)
@@ -26,16 +26,16 @@ def startrecording(room_id):
         b = danmaku.Client(room_id, filename_header + '.xml')
         b.start()
         
-        subprocess.call(['ffmpeg','-i', url, '-c:v', vcodec, filename_header + '.mp4'])
+        subprocess.call(['ffmpeg','-i', url, '-c:v', vcodec, filename_header + '.flv'])
         b.stop()
         log('[%d] recording stopped.' % room_id)
     else:
         log('[%d] live not started' % room_id)
 
 if __name__=='__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) == 1:
         raise Exception('wrong usage')
     else:
-        waitforlive(int(sys.argv[1]))
+        waitforlive(sys.argv[1:])
 
 
