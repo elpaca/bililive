@@ -1,7 +1,7 @@
 # BILILIVE
 A bilibili live stream & danmaku fetcher. 
-USAGE
------
+
+## USAGE
 ```
 python3 waitlive.py <room_id>
 ```
