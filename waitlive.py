@@ -36,9 +36,6 @@ if __name__=='__main__':
     if len(sys.argv) != 2:
         raise Exception('wrong usage')
     else:
-        try:
-            waitforlive(int(sys.argv[1]))
-        except KeyboardInterrupt:
-            b.stop()
+        waitforlive(int(sys.argv[1]))
 
 
