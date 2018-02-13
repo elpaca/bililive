@@ -8,7 +8,11 @@ def geturl(room_id):
     if not islivestarted(room_id):
         raise Exception('live not started')
     r = requests.get("https://api.live.bilibili.com/room/v1/Room/playUrl?cid=" + str(room_id) + "&quality=0&platform=web")
-    return r.json()['data']['durl'][0]['url']
+    mainUrl = r.json()['data']['durl'][0]['url']
+    # log('primary url: ' + mainUrl)
+    r = requests.get(mainUrl, stream=True)
+    # log('redirected url: ' + r.url)
+    return r.url
 
 def islivestarted(room_id):
     r = requests.get("https://api.live.bilibili.com/room/v1/Room/get_info?room_id=" + str(room_id) + "&from=room")

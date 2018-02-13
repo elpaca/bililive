@@ -48,7 +48,7 @@ class Client():
 						user_name = msg_json['info'][2][1]
 						comment = msg_json['info'][1]
 						if showDanmakuLog:
-							log('[DANMAKU] %s: %s' % (user_name, comment))
+							log('[%d] [DANMAKU] %s: %s' % (self.room_id, user_name, comment))
 						self.f.write('<d p="%.5f,%d,%d,%d,%d,%d,%s,2332332332">%s</d>' % (time.time()-self.start_time, msg_json['info'][0][1], msg_json['info'][0][2],msg_json['info'][0][3],msg_json['info'][0][4],msg_json['info'][0][6],msg_json['info'][0][7],msg_json['info'][1]))
 						self.f.flush()
 						
