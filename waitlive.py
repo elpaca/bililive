@@ -12,7 +12,7 @@ vcodec = 'copy' # copy, h264, hevc
 showFFMPEGOutput = False
 
 def wait_for_live(room_id):
-    log('[%d] start waiting' % room_id)
+    log('ROOM %d: start waiting' % room_id)
     while(True):
         real_id = liveutils.getrealroomid(room_id)
         start_recording(real_id)

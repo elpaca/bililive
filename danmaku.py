@@ -14,24 +14,24 @@ import string
 import urllib
 from liveutils import log
 
-ChatPort=788
-protocolVersion=1
-ChatHost='livecmt-1.bilibili.com'
-showDanmakuLog=True
+CHATPORT=788
+PROTOCOL_VERSION=1
+CHATSERVER='livecmt-1.bilibili.com'
+SHOW_DANMAKULOG=True
 
 class Client():
 	def __init__(self, room_id, danmaku_filename):
 		self.sock = None
 		self.room_id = room_id
 		self.f = open(danmaku_filename, 'w')
-		self.f.write('<?xml version="1.0" encoding="UTF-8"?><i><chatserver>chat.bilibili.com</chatserver><chatid>' + str(self.room_id) + '</chatid><mission>0</mission><maxlimit>233233233</maxlimit><state>0</state><realname>0</realname><source>k-v</source>')
+		self.f.write('<?xml version="1.0" encoding="UTF-8"?><i><chatserver>' + CHATSERVER + '</chatserver><chatid>' + str(self.room_id) + '</chatid><mission>0</mission><maxlimit>233233233</maxlimit><state>0</state><realname>0</realname><source>k-v</source>')
 		self.start_time = time.time()
 		self.started = False
 
 	def handle_data(self, data):
 		data_length=len(data)
 		if data_length < 16:
-			log("broken data. reconnecting...")
+			log("broken data. reconnecting")
 			self.connect()
 		else:
 			info=struct.unpack("!ihhii" + str(data_length - 16) + "s", data)
@@ -47,7 +47,7 @@ class Client():
 					if msg_type == "DANMU_MSG":
 						user_name = msg_json['info'][2][1]
 						comment = msg_json['info'][1]
-						if showDanmakuLog:
+						if SHOW_DANMAKULOG:
 							log('[%d] [DANMAKU] %s: %s' % (self.room_id, user_name, comment))
 						self.f.write('<d p="%.5f,%d,%d,%d,%d,%d,%s,2332332332">%s</d>' % (time.time()-self.start_time, msg_json['info'][0][1], msg_json['info'][0][2],msg_json['info'][0][3],msg_json['info'][0][4],msg_json['info'][0][6],msg_json['info'][0][7],msg_json['info'][1]))
 						self.f.flush()
@@ -60,25 +60,25 @@ class Client():
 
 
 	def connect(self):
-		log("connecting to danmaku server...")
+		log("connecting to danmaku server")
 		uid= (int)(100000000000000.0 + 200000000000000.0*random.random())
 		body='{"roomid":%s,"uid":%s}' % (self.room_id, uid)
 
 		bytearr = body.encode('utf-8')
 		log('danmaku server login: ' + str(body))
 		packetlength = len(bytearr)+16
-		sendbytes = struct.pack('!IHHII', packetlength, 16, protocolVersion, 7, 1)
+		sendbytes = struct.pack('!IHHII', packetlength, 16, PROTOCOL_VERSION, 7, 1)
 		if len(bytearr) != 0:
 		    sendbytes = sendbytes + bytearr
 
 		self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.sock.connect((ChatHost, ChatPort))
+		self.sock.connect((CHATSERVER, CHATPORT))
 		self.sock.send(sendbytes)
 
 	def send_heart_beat_msg(self):
 		while self.started:
 			time.sleep(20)
-			sendBytes = struct.pack('!IHHII', 16, 16, protocolVersion, 2, 1)
+			sendBytes = struct.pack('!IHHII', 16, 16, PROTOCOL_VERSION, 2, 1)
 			self.sock.send(sendBytes)
 
 	def recv_msg_loop(self):
