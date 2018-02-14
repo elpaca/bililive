@@ -15,6 +15,7 @@ OUT_VCODEC = 'copy' # copy, h264, hevc
 OUT_BITRATE = 'copy' # copy, 2000k, 5000k
 OUT_FRAMERATE = 'copy' # copy, 30, 60
 SHOW_FFMPEG_OUTPUT = False
+OUTPUT_DIR = './'
 
 def wait_for_live(room_id):
     log('ROOM %d: start waiting' % room_id)
@@ -34,14 +35,14 @@ def start_recording(room_id):
         filename_header = '%s_%s_%s' % (livername, livetitle, time.strftime('%Y%m%d_%H%M%S', t))
         b = danmaku.Client(room_id, filename_header + '.xml')
         b.start()
-        argv = ['ffmpeg', '-i', '"%s"' % url, '-c:v', OUT_VCODEC]
+        argv = ['ffmpeg', '-i', '"%s"' % url, '-c:a', 'copy', '-c:v', OUT_VCODEC]
         if not OUT_BITRATE == 'copy':
             argv.append('-b:v')
             argv.append(OUT_BITRATE)
         if not OUT_FRAMERATE == 'copy':
             argv.append('-r')
             argv.append(OUT_FRAMERATE)
-        argv.append(filename_header + '.flv')
+        argv.append(OUTPUT_DIR + filename_header + '.flv')
 
         if SHOW_FFMPEG_OUTPUT:
             subprocess.check_call(argv)
