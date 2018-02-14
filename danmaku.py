@@ -85,10 +85,11 @@ class Client():
 		while self.started:
 			try:
 				recv_data=self.sock.recv(1024000)
+				self.handle_data(recv_data)
 			except:
 				self.sock.close()
 				self.connect()
-			self.handle_data(recv_data)
+			
 	
 	def stop(self):
 		self.started = False
