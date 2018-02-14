@@ -32,17 +32,17 @@ def start_recording(room_id):
         t = time.localtime(time.time())
         livername = liveutils.getlivername(room_id)
         livetitle = liveutils.getlivetitle(room_id)
-        filename_header = '%s_%s_%s' % (livername, livetitle, time.strftime('%Y%m%d_%H%M%S', t))
+        filename_header = '%s%s_%s_%s' % (OUTPUT_DIR, livername, livetitle, time.strftime('%Y%m%d_%H%M%S', t))
         b = danmaku.Client(room_id, filename_header + '.xml')
         b.start()
-        argv = ['ffmpeg', '-i', '"%s"' % url, '-c:a', 'copy', '-c:v', OUT_VCODEC]
+        argv = ['ffmpeg', '-i', url, '-c:a', 'copy', '-c:v', OUT_VCODEC]
         if not OUT_BITRATE == 'copy':
             argv.append('-b:v')
             argv.append(OUT_BITRATE)
         if not OUT_FRAMERATE == 'copy':
             argv.append('-r')
             argv.append(OUT_FRAMERATE)
-        argv.append(OUTPUT_DIR + filename_header + '.flv')
+        argv.append(filename_header + '.flv')
 
         if SHOW_FFMPEG_OUTPUT:
             subprocess.check_call(argv)
